@@ -11,31 +11,14 @@ router.get('/', (req, res) => {
 	let code = req.query.code;
 	let term = req.query.term;
 	let year = req.query.year;
-	let student = {};
 	itnoodle
 	.studentCol
 	.findOne({code: code, year: year, term: term}).then((std) => {
 		if(std) {
-			copy_value_by_fields(
-				["code", "fullname", "birthday", "klass", "year", "term"],
-				std,
-				student
-			);
-			student.courses = std.slots;
-			Object.keys(std.slots).forEach((c_code) => {
-				let src = {};
-				if(std.finaltests) {
-					if(std.finaltests[c_code])
-						src = std.finaltests[c_code];
-					copy_value_by_fields(
-						["seat_no", "day", "time", "shift", "room", "building", "type"],
-						src,
-						student.courses[c_code]
-					)
-				}
-			});
+			delete std._id;
 			let course_codes = Object.keys(std.slots);
 			// console.log(course_codes);
+			std.sbs = {};
 			itnoodle
 			.scoreboardCol
 			.find({term: term, year: year, "course.code": {$in: course_codes}}).toArray((err, sbs) => {
@@ -43,15 +26,16 @@ router.get('/', (req, res) => {
 					sbs.forEach((sb) => {
 						// console.log("scoreboard");
 						// console.log(sb.course);
+						std.sbs[sb.course.code] = {};
 						copy_value_by_fields(
 							["public_link", "uploadtime"],
 							sb.course,
-							student.courses[sb.course.code]
+							std.sbs[sb.course.code]
 						)
 					})
 				else
 					console.log("--- NO SCOREBOARD----")
-				res.json(student);
+				res.json(std);
 			});
 		}
 	});
