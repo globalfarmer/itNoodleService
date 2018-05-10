@@ -1,0 +1,27 @@
+{
+  "name": "itnoodleservice",
+  "version": "1.0.0",
+  "description": "itnoodle service",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/globalfarmer/itNoodleService.git"
+  },
+  "keywords": [
+    "itnoodle",
+    "uet",
+    "social",
+    "network"
+  ],
+  "author": "globalfarmer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/globalfarmer/itNoodleService/issues"
+  },
+  "homepage": "https://github.com/globalfarmer/itNoodleService#readme"
+}
