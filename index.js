@@ -13,6 +13,7 @@ var	MongoClient = require('mongodb').MongoClient;
 var config = require('./config/config.json');
 
 var student = require('./routes/student');
+var announce = require('./routes/announce');
 
 
 //public file
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 //route
 app.use('/student', student);
+app.use('/announce', announce);
 
 MongoClient.connect(config.db.host, function(err, client) {
 	if(err)
@@ -39,6 +41,7 @@ MongoClient.connect(config.db.host, function(err, client) {
 		itnoodle.db = client.db(config.db.dbname);
 		itnoodle.studentCol = itnoodle.db.collection('student');
 		itnoodle.scoreboardCol = itnoodle.db.collection('scoreboard');
+		itnoodle.announceCol = itnoodle.db.collection('announce');
 		var server = app.listen(80, () => {
 			console.log('Server started on port ' + 80);
 		});
