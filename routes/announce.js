@@ -22,5 +22,91 @@ router.get('/', (req, res) => {
 		}
 	});
 })
+router.post('/star', (req, res) => {
+	console.log("call announce API STAR");
+	let session = req.body.session;
+	let content = JSON.parse(req.body.content);
+	let stars = {};
+	if(content.url)
+		stars[Buffer.from(content.url).toString('base64')] = content;
+	itnoodle.favAnnounceCol.findOne({session: session}, (err, favAnnounce) => {
+		if(err) {
+			console.log("ERR " + err);
+			res.sendStatus(400);
+		}
+		else
+		{
+			console.log("--- FAVORITE ANNOUNCE --- ");
+			// console.log(favAnnounce);
+			if(favAnnounce) {
+				Object.keys(stars).forEach((a_url) => {
+					favAnnounce.stars[a_url] = stars[a_url];
+				});
+				itnoodle.favAnnounceCol.updateOne({session: session}, {$set: {stars: favAnnounce.stars}}, (err, result) => {
+					if(err) {
+						console.log("INSERT ERR");
+						console.log(err);
+						res.sendStatus(400);
+					}
+					else {
+						delete favAnnounce._id;
+						res.json(favAnnounce);
+					}
+				})
+			}
+			else {
+				itnoodle.favAnnounceCol.insert({session: session, stars: stars}, (err, result) => {
+					if(err) {
+						console.log("INSERT ERR");
+						console.log(err);
+						res.sendStatus(400);
+					}
+					else {
+						res.json({session: session, stars: stars});
+					}
+				})
+			}
+		}
+	})
+})
+router.delete('/unstar', (req, res) => {
+	console.log("call announce API UNSTAR");
+	let session = req.body.session;
+	let content = JSON.parse(req.body.content);
+	let stars = {};
+	if(content.url)
+		stars[Buffer.from(content.url).toString('base64')] = 1;
+	itnoodle.favAnnounceCol.findOne({session: session}, (err, favAnce) => {
+		if(err) {
+			console.log("ERR");
+			console.log(err);
+			res.sendStatus(400);
+		}
+		else {
+			if(favAnce) {
+				Object.keys(stars).forEach((c_url) => {
+					delete favAnce.stars[c_url];
+				});
+				itnoodle.favAnnounceCol.updateOne({session: session}, {$set: {stars: favAnce.stars}}, (err, result)=>{
+					if(err) {
+						console.log("ERR FAV ANNOUCE UPDATE");
+						console.log(err);
+						res.sendStatus(400);
+					} else {
+						delete favAnce._id;
+						res.json(favAnce);
+					}
+				});
+			}
+			else {
+				res.json({session: session, stars: {}});
+			}
+		}
+	});
+})
+router.get('/favorite', (req, res) => {
+	console.log("call announce API FAVORITE");
+	// equal post('/star') with empty content
+})
 
 module.exports = router;

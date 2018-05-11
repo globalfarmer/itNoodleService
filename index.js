@@ -42,6 +42,7 @@ MongoClient.connect(config.db.host, function(err, client) {
 		itnoodle.studentCol = itnoodle.db.collection('student');
 		itnoodle.scoreboardCol = itnoodle.db.collection('scoreboard');
 		itnoodle.announceCol = itnoodle.db.collection('announce');
+		itnoodle.favAnnounceCol = itnoodle.db.collection('favorite_announce');
 		var server = app.listen(80, () => {
 			console.log('Server started on port ' + 80);
 		});
