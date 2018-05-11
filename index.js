@@ -14,6 +14,7 @@ var config = require('./config/config.json');
 
 var student = require('./routes/student');
 var announce = require('./routes/announce');
+var scoreboard = require('./routes/scoreboard');
 
 
 //public file
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 //route
 app.use('/student', student);
 app.use('/announce', announce);
+app.use('/scoreboard', scoreboard);
 
 MongoClient.connect(config.db.host, function(err, client) {
 	if(err)
@@ -43,6 +45,7 @@ MongoClient.connect(config.db.host, function(err, client) {
 		itnoodle.scoreboardCol = itnoodle.db.collection('scoreboard');
 		itnoodle.announceCol = itnoodle.db.collection('announce');
 		itnoodle.favAnnounceCol = itnoodle.db.collection('favorite_announce');
+		itnoodle.favScoreboardCol = itnoodle.db.collection('favorite_scoreboard');
 		var server = app.listen(80, () => {
 			console.log('Server started on port ' + 80);
 		});
