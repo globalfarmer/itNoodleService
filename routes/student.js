@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
 			delete std._id;
 			let course_codes = Object.keys(std.slots);
 			// console.log(course_codes);
+			// TODO validate term, year
 			std.sbs = {};
 			itnoodle
 			.scoreboardCol
