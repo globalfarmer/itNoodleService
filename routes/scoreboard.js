@@ -5,9 +5,9 @@ var pageSize = 8;
 router.get('/', (req, res) => {
 	console.log("call scoreboard api");
 	let page = parseInt(req.query.page) || 1;
-	let term = req.body.term || 1;
-	let year = req.body.year;
-	let type_edu = parseInt(req.body.type_edu) || 0;
+	let term = req.query.term || 1;
+	let year = req.query.year;
+	let type_edu = parseInt(req.query.type_edu) || 0;
 	page = Math.max(1, page);
 	let scoreboards = {page: page};
 	itnoodle
@@ -21,6 +21,8 @@ router.get('/', (req, res) => {
 			scoreboards.content = [];
 			sbs.forEach((sb) => {
 				scoreboards.content.push({
+					term_name: sb.term_name,
+					year_name: sb.year_name,
 					term: term,
 					year: year,
 					type_edu: type_edu,
@@ -39,12 +41,9 @@ router.post('/star', (req, res) => {
 	// TODO validate session
 	let session = req.body.session;
 	let content = JSON.parse(req.body.content);
-	console.log(content);
 	let stars = {};
-	content.forEach((con) => {
-		if(con.public_src)
-			stars[Buffer.from(con.public_src).toString("base64")] = con.public_src;
-	})
+	if(content.public_src)
+		stars[Buffer.from(content.public_src).toString("base64")] = content;
 	// console.log(stars);
 	itnoodle.favScoreboardCol.findOne({session: session}).then((favScore) => {
 		// console.log(favScore);
@@ -82,10 +81,8 @@ router.delete('/unstar', (req, res) => {
 	let content = JSON.parse(req.body.content);
 	console.log(content);
 	let stars = {};
-	content.forEach((con) => {
-		if(con.public_src)
-			stars[Buffer.from(con.public_src).toString("base64")] = con.public_src;
-	})
+	if(content.public_src)
+		stars[Buffer.from(content.public_src).toString("base64")] = 1;
 	itnoodle.favScoreboardCol.findOne({session: session}).then((favScore) => {
 		if(favScore) {
 			Object.keys(stars).forEach((p_src) => {
@@ -106,16 +103,6 @@ router.delete('/unstar', (req, res) => {
 })
 router.get('/favorite', (req, res) => {
 	console.log("call scoreboard api FAVORITE");
-	let session = req.query.session;
-	itnoodle.favScoreboardCol.findOne({session: session}).then((favScore) => {
-		if(favScore) {
-			delete favScore._id;
-			res.json(favScore);	
-		}
-		else
-			res.json({session: session, stars: {}});	
-	}).catch((e) => {
-		console.log(e);
-	})
+	// equal post /star with empty content
 })
 module.exports = router;
