@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 					term: term,
 					year: year,
 					type_edu: type_edu,
-					code: [sb.course.code.slice(0,7), sb.course.code.slice(7)==""?"1":sb.course.code.slice(7)].join("-"),
+					code: [sb.course.code.slice(0,7), sb.course.code.slice(7)==""?"1":sb.course.code.slice(7)].join("-").toUpperCase(),
 					name: sb.course.name,
 					public_src: sb.course.src,
 					uploadtime: [[d.getHours(), d.getMinutes()].join(':'), [("0"+d.getDate()).slice(-2), ("0"+(d.getMonth()+1)).slice(-2), d.getFullYear()].join('-')].join(" ")
