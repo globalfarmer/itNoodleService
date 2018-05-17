@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var itnoodle = require('../project_modules/itnoodle.js');
-var pageSize = 8;
+var pageSize = 300;
 router.get('/', (req, res) => {
 	console.log("call scoreboard api");
 	let page = parseInt(req.query.page) || 1;
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 					term: term,
 					year: year,
 					type_edu: type_edu,
-					code: sb.course.code,
+					code: [sb.course.code.slice(0,7), sb.course.code.slice(7)==""?"1":sb.course.code.slice(7)].join("-"),
 					name: sb.course.name,
 					public_src: sb.course.src,
 					uploadtime: [[d.getHours(), d.getMinutes()].join(':'), [("0"+d.getDate()).slice(-2), ("0"+(d.getMonth()+1)).slice(-2), d.getFullYear()].join('-')].join(" ")
