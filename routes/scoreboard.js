@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var itnoodle = require('../project_modules/itnoodle.js');
-var pageSize = 300;
+var pageSize = 1000;
 router.get('/', (req, res) => {
 	console.log("call scoreboard api");
 	let page = parseInt(req.query.page) || 1;
