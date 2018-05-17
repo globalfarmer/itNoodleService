@@ -17,9 +17,11 @@ router.get('/', (req, res) => {
 	.limit(pageSize)
 	.sort({"course.uploadtime": -1})
 	.toArray((err, sbs) => {
+		let d;
 		if(!err) {
 			scoreboards.content = [];
 			sbs.forEach((sb) => {
+				d = new Date(sb.course.uploadtime.getTime() + 7*60*60*1000);
 				scoreboards.content.push({
 					term_name: sb.term_name,
 					year_name: sb.year_name,
@@ -29,7 +31,7 @@ router.get('/', (req, res) => {
 					code: sb.course.code,
 					name: sb.course.name,
 					public_src: sb.course.src,
-					uploadtime: sb.course.uploadtime
+					uploadtime: [[d.getHours(), d.getMinutes()].join(':'), [("0"+d.getDate()).slice(-2), ("0"+(d.getMonth()+1)).slice(-2), d.getFullYear()].join('-')].join(" ")
 				});
 			})
 			res.json(scoreboards);
