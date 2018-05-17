@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 			for(idx = 0; idx < ans.length; idx++) {
 				delete ans[idx]._id;
 				if(ans[idx]['uploadtime']) {
-					d = ans[idx]['uploadtime'];
+					d = new Date(ans[idx]['uploadtime'].getTime() + 7*60*60*1000);
 					ans[idx]['uploadtime'] = [("0"+d.getDate()).slice(-2), ("0"+(d.getMonth()+1)).slice(-2), d.getFullYear()].join('-');
 				}
 			}
