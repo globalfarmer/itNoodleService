@@ -15,6 +15,8 @@ router.get('/', (req, res) => {
 	.studentCol
 	.findOne({code: code, year: year, term: term}).then((std) => {
 		if(std) {
+			let d = new Date(std.birthday.getTime() + 7*60*60*1000);
+			std.birthday = [('0'+d.getDate()).slice(-2), ("0"+(d.getMonth()+1)).slice(-2), d.getFullYear()].join('-');
 			delete std._id;
 			let course_codes = Object.keys(std.slots);
 			// console.log(course_codes);
