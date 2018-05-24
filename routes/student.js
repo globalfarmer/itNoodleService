@@ -45,7 +45,7 @@ router.get('/', (req, res) => {
 					std.slots[cc].time = 0;
 			})
 			course_codes.sort((a, b) => std.slots[a].time > std.slots[b].time);
-			std.course_cods = course_codes;
+			std.course_codes = course_codes;
 			std.sbs = {};
 			itnoodle
 			.scoreboardCol
